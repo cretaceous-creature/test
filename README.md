@@ -10,7 +10,7 @@
 
 ### You need:
    
-*   Chessboard: Make sure ur Application Range, if u wanna use camera in short range(0.5~2m) choose small chessboard, otherwise plz choose a larger one. 
+*   Chessboard: Make sure ur Application Range, if u wanna use camera in short range(0.5m~2m) choose small chessboard, otherwise plz choose a larger one. 
 *   Depth Camera: Kinect one, Xtion, Primesense. (There may be some problem when using primesense, check `http://answers.ros.org/question/197318/openni2_launch-doesnt-work-with-carmine-109-connected-to-usb30/?comment=198397#comment-198397` to install the newest openni2, perhaps u need to do `apt-get remove libopenni2-0` first)
 *   Good PC with ubuntu and ros installed:  We only tested in Lenovo thinkpad series.
 *   jsk\_pcl\_ros:   `https://github.com/jsk-ros-pkg/jsk_recognition/tree/master/jsk_pcl_ros`
@@ -28,16 +28,23 @@ We assume the intrisic calibration has been performed well.
 
 * Do `roscd jsk_pcl_ros` and `cd launch`, find file `depth_error.launch` edit param `rect0_size_x` `rect0_size_y` and  `grid0_size_x` `grid0_size_y` according to your chessboard. Then `roslaunch jsk_pcl_ros depth_error.launch`
 
-* Open new CMD and run `rosrun image_view image_view image:=/depth_error_linear_regression/frequency_map`
+* Open new Terminal and run `rosrun image_view image_view image:=/depth_error_linear_regression/frequency_map`
 
 * Do `rosrun rviz rviz` and subscribe to 3 topics(two pointcloud2 and one Pose)
-Pose `/checkerdetector/objectdetection_pose`
-Raw Pointcloud `/camera_remote_uncalibrated/depth_registered/points`
-Calibrated Pointcloud ``/camera_remote/depth_registered/points``
-You will see the Error between Pose(Estimated by rbg camera while looking at chessboard) and uncalibrated
-camera
 
-* Open another CMD and run `rosrun jsk_pcl_ros depth_error_calibration.py --model quadratic-uv-quadratic-abs`
+Pose `/checkerdetector/objectdetection_pose`
+
+Raw Pointcloud `/camera_remote_uncalibrated/depth_registered/points`
+
+Calibrated Pointcloud ``/camera_remote/depth_registered/points``
+
+You will see the Error between Pose(Estimated by rbg camera while looking at chessboard) and uncalibrated
+pointcloud.
+
+* Open another Terminal and run `rosrun jsk_pcl_ros depth_error_calibration.py --model quadratic-uv-quadratic-abs` and move the chessboard slowly while watching to image window. The edges of the image should be covered and the range(due to your application) should also be covered as more as possible.
+Checking the Rviz output when you find the calibrated pointcloud overlaps the Pose vector. `Ctrl+c` in this Terminal and enter `y` to save the calibration file. Edit `openni2_remote.launch` file and find the param `depth_calibration_file`, add the path of your calibration file.
+
+* Finish and Check it again.
 
 
 
