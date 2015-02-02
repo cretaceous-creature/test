@@ -17,31 +17,31 @@
 
 ### Camera Intrisic Calibration:
 
-* Please follow `http://wiki.ros.org/camera_calibration/Tutorials/MonocularCalibration` tutorial and when U finished calibration(4 features become green), wait patiently until u can click upload, calibration file will be right there in `~/.ros/camera_info/***.yaml` waiting.  Check the `openni2_launch.launch` file or `openni2_local.launch` if u use JSK package to edit the path.
+* Please follow `http://wiki.ros.org/camera_calibration/Tutorials/MonocularCalibration` tutorial and when u finished calibration(4 features become green), wait patiently until u can click upload, calibration file will be right there in `~/.ros/camera_info/***.yaml` waiting.  Check the `openni2_launch.launch` file or `openni2_local.launch` if u use JSK package to edit the path.
 
 * For Details Please Refer to `Zhang, Zhengyou. "A flexible new technique for camera calibration." Pattern Analysis and Machine Intelligence, IEEE Transactions on 22.11 (2000): 1330-1334.`
 
 ###Depth Calibration(Available only in jsk\_pcl\_ros package):
 We assume the intrisic calibration has been performed well.
 
-* Plug in ur depth camera and run `roslaunch jsk_pcl_ros openni2_local.launch` and `roslaunch jsk_pcl_ros openni2_remote.launch` (Load the camera intrisic calibration file)
+* Plug in ur depth camera to your favourite USB port and run `roslaunch jsk_pcl_ros openni2_local.launch` and `roslaunch jsk_pcl_ros openni2_remote.launch` (Load the camera intrisic calibration file)
 
-* Do `roscd jsk_pcl_ros` and `cd launch`, find file `depth_error.launch` edit param `rect0_size_x` `rect0_size_y` and  `grid0_size_x` `grid0_size_y` according to your chessboard. Then `roslaunch jsk_pcl_ros depth_error.launch`
+* Do `roscd jsk_pcl_ros` and `cd launch`, find file `depth_error.launch` and edit param `rect0_size_x` `rect0_size_y` and  `grid0_size_x` `grid0_size_y` according to your chessboard. Then `roslaunch jsk_pcl_ros depth_error.launch`
 
 * Open new Terminal and run `rosrun image_view image_view image:=/depth_error_linear_regression/frequency_map`
 
 * Do `rosrun rviz rviz` and subscribe to 3 topics(two pointcloud2 and one Pose)
 
-Pose `/checkerdetector/objectdetection_pose`
+1. Pose `/checkerdetector/objectdetection_pose`
 
-Raw Pointcloud `/camera_remote_uncalibrated/depth_registered/points`
+2. Raw Pointcloud `/camera_remote_uncalibrated/depth_registered/points`
 
-Calibrated Pointcloud ``/camera_remote/depth_registered/points``
+3. Calibrated Pointcloud ``/camera_remote/depth_registered/points``
 
 You will see the Error between Pose(Estimated by rbg camera while looking at chessboard) and uncalibrated
 pointcloud.
 
-* Open another Terminal and run `rosrun jsk_pcl_ros depth_error_calibration.py --model quadratic-uv-quadratic-abs` and move the chessboard slowly while watching to image window. The edges of the image should be covered and the range(due to your application) should also be covered as more as possible.
+* Open another Terminal and run `rosrun jsk_pcl_ros depth_error_calibration.py --model quadratic-uv-quadratic-abs` and move the chessboard slowly while watching to the image window. The edges of the image should be covered and the range(due to your application) should also be covered as more as possible.
 Checking the Rviz output when you find the calibrated pointcloud overlaps the Pose vector. `Ctrl+c` in this Terminal and enter `y` to save the calibration file. Edit `openni2_remote.launch` file and find the param `depth_calibration_file`, add the path of your calibration file.
 
 * Finish and Check it again.
