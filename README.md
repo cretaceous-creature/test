@@ -1,7 +1,7 @@
 # jsk_pcl_ros
 
 ## Depth Camera Calibration(Kinect,Xtion,Primesense)
-![](image/depth_calibration.png)
+![](images/depth_calibration.png)
 ### Two Main Steps:
 
 *  `1. Camera Intrisic Calibration: Intrisic Calibration` `Please refer to ros RGB camera calibration tutorial` >> `http://wiki.ros.org/camera_calibration/Tutorials/MonocularCalibration`
